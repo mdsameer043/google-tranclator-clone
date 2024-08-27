@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Translator</title>
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+      overflow: visible;
+    }
+
+    .navbar {
+      border-bottom: 1px solid rgb(227, 222, 222);
+    }
+
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+
+    .sidenav a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    /*button group style*/
+    #first_container_languages_buttons {
+      position: absolute;
+      top: 23vh;
+      left: 7vw;
+    }
+
+    #second_container_languages_buttons {
+      position: absolute;
+      top: 23vh;
+      left: 51vw;
+    }
+
+
+    /* first container*/
+    .input_text_container {
+      .input_text {
+        height: 7vh;
+        width: 40vw;
+        margin-top: 2vh;
+        margin-left: 1vw;
+        font-size: 3.5vh;
+        outline: 0;
+        border: 0;
+      }
+
+      #input_text_count_h1 {
+        color: #818181;
+        font-size: 2vh;
+        position: absolute;
+        top: 21vh;
+        left: 33vw;
+      }
+
+      #form_mic {
+        cursor: pointer;
+        font-size: 0;
+        height: 2.8vh;
+        width: 1.5vw;
+        border: 0;
+        background-color: white;
+        border-radius: 50px;
+        background-image: url("{{url_for('static',filename='mic2.png')}}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 19.5vh;
+        left: 1vw;
+      }
+
+      .mic_background {
+        font-size: 0;
+        background-color: white;
+        height: 5vh;
+        width: 5vh;
+        border-radius: 50px;
+        position: absolute;
+        top: 18.5vh;
+        left: 0.6vw;
+
+      }
+
+      #first_box_speaker {
+        cursor: pointer;
+        visibility: hidden;
+        font-size: 0;
+        height: 2.6vh;
+        width: 1.3vw;
+        background-image: url("{{url_for('static',filename='speaker.png')}}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: white;
+        border-radius: 50px;
+        border: 0;
+        position: absolute;
+        top: 19.5vh;
+        left: 3.5vw;
+      }
+
+      height: 25vh;
+      width: 42vw;
+      border: 1px solid rgb(227, 222, 222);
+      border-radius: 10px;
+      position: absolute;
+      top: 30vh;
+      left: 7vw;
+    }
+
+    /* second container */
+    .output_text_container {
+      #translate_text_h1 {
+        margin-top: 2vh;
+        margin-left: 1vw;
+        font-size: 2vw;
+      }
+
+      #user_input_data_upon_speaker {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        height: 3vh;
+        width: 39vw;
+        color: #818181;
+        font-size: 2vh;
+        border: 0;
+        position: absolute;
+        top: 16vh;
+        left: 2vw;
+      }
+
+      #output_text_container_speaker_image {
+        cursor: pointer;
+        visibility: hidden;
+        height: 2.5vh;
+        width: 1.5vw;
+        position: absolute;
+        top: 20vh;
+        left: 1.5vw;
+      }
+
+      background-color: #dee1e7;
+      height: 25vh;
+      width: 42vw;
+      border: 1px solid rgb(227, 222, 222);
+      border-radius: 10px;
+      position: absolute;
+      top: 30vh;
+      right: 7vw;
+    }
+
+    @media screen and (max-width: 450px) {
+      .sidenav {
+        padding-top: 15px;
+      }
+
+      .sidenav a {
+        font-size: 18px;
+      }
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <!-- three line for side bar -->
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+      </div>
+      <a class="navbar-brand" href="#"><span style="font-size:20px;cursor:pointer" onclick="openNav()"> &#9776; </span>
+        My Translator</a>
+    </div>
+  </nav>
+
+  <!-- displaying input languages -->
+  <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
+    id="first_container_languages_buttons">
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+    <label class="btn btn-outline-primary" for="btnradio1" style="border: 0;">English</label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio2" style="border: 0;">Hindi</label>
+
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio3" style="border: 0;">Telugu</label>
+  </div>
+
+  <!--################################## first container ######################-->
+  <div class="input_text_container">
+    <div onkeypress="return keyPressed_function(event)">
+      <form id="input_form_id" action="/login" method="POST">
+        <input type="text" name="input_text_up" value="valid" style="font-size:0;border:0;">
+        <input type="text" name="input_text" class="input_text" placeholder="Enter text" {% if user_input_field %}
+          value="{{ user_input_field }}" {% endif %}>
+        <!-- <input type="submit" style="font-size:0;border:0;"> -->
+      </form>
+    </div>
+
+    <h1 id="input_text_count_h1"><span id="word_count"></span>/5000</h1>
+
+    <!-- mic input -->
+    <div class="mic_background"></div>
+    <form action="/login" method="POST">
+      <input type="text" value="mic" style="font-size:0;border:0;" name="mic_key">
+      <input id="form_mic" type="submit">
+    </form>
+
+    <!-- first box speaker -->
+    <form action="/login" method="POST">
+      <input type="text" style="font-size:0;border:0;" name="speaker_python_value" id="python_speaker_value">
+      <input type="text" value="first_box_speaker" style="font-size:0;border:0;" name="first_box_speaker_key">
+      <input id="first_box_speaker" type="submit">
+    </form>
+  </div>
+
+
+
+  <!-- displaying output languages -->
+  <div class="btn-group" role="group" aria-label="Basic radio toggle button group"
+    id="second_container_languages_buttons">
+    <input type="radio" class="btn-check" name="btnradiosecond" id="btnradio4" value="Urdu">
+    <label class="btn btn-outline-primary" for="btnradio4" style="border: 0;">Urdu</label>
+
+    <input type="radio" class="btn-check" name="btnradiosecond" id="btnradio5" value="Arabic">
+    <label class="btn btn-outline-primary" for="btnradio5" style="border: 0;">Arabic</label>
+
+    <input type="radio" class="btn-check" name="btnradiosecond" id="btnradio6" value="Hindi">
+    <label class="btn btn-outline-primary" for="btnradio6" style="border: 0;">Hindi</label>
+    <!-- <input type="radio" class="btn-check" name="btnradiosecond" id="btnradio7" value="more"> -->
+    <!-- <label class="btn btn-outline-primary" for="btnradio7" style="border: 0;">more</label> -->
+    <select name="btnradio7" id="more_output_languages" style="border: none;">
+      <option value="volvo">Volvo</option>
+      <option value="saab">Saab</option>
+      <option value="mercedes">Mercedes</option>
+      <option value="audi">Audi</option>
+    </select>
+  </div>
+
+
+  <!-- output language button selection -->
+  <form id="output_language_form" action="/login" method="POST">
+    <input type="text" name="language_validation" value="valid" style="display: none;">
+    <input type="text" id="selected_button_value" name="checked_value_for_flask" style="display: none;">
+    <input type="text" id="input_field_value" name="input_field_value" style="display: none;">
+  </form>
+  <!-- button selected value from flask -->
+  <input type="text" name="hello" id="button_selected_value_from_three" {% if button %} value="{{ button }}" {% endif %}
+    style="font-size: 0;border:0;">
+
+  <form id="output_language_form_next" action="/login" method="POST">
+    <input type="text" name="language_validation" value="valid" style="display: none;">
+    <input type="text" id="selected_button_value_next" name="checked_value_for_flask_next" style="display: none;">
+  </form>
+
+
+
+  <!-- ####################### second container ################### -->
+  <div class="output_text_container">
+    <h1 id="translate_text_h1"></h1>
+    <h1 id="user_input_data_upon_speaker"></h1>
+    <!-- output speaker -->
+    <div>
+      <img src="{{url_for('static',filename='speaker.png')}}" alt="image not found"
+        id="output_text_container_speaker_image" onclick="second_box_speaker_play()">
+      <!-- <audio id="audio_button_id" style="font: size 0;border:0;display:block;"></audio> -->
+    </div>
+
+  </div>
+
+
+
+  <script>
+    let language_selected = document.querySelector("#button_selected_value_from_three").value;
+    if (language_selected == "Urdu") {
+      document.querySelector('#btnradio4').checked = true;
+    }
+    else if (language_selected == "Arabic") {
+      document.querySelector('#btnradio5').checked = true;
+    }
+    else if (language_selected == "Hindi") {
+      document.querySelector('#btnradio6').checked = true;
+    }
+
+
+    //mouse background color change function
+    document.querySelector("#form_mic").addEventListener("mouseover", () => {
+      document.querySelector("#form_mic").style.backgroundColor = "rgb(204, 201, 201)";
+      document.querySelector(".mic_background").style.backgroundColor = "rgb(204, 201, 201)";
+    });
+    document.querySelector("#form_mic").addEventListener("mouseout", () => {
+      document.querySelector("#form_mic").style.backgroundColor = "white";
+      document.querySelector(".mic_background").style.backgroundColor = "white";
+    });
+
+
+    // second box speaker function
+    //let abaudio=Audio()
+    let second_box_audio = document.createElement('audio');
+    function second_box_speaker_play() {
+      second_box_audio.setAttribute('src', 'static/hello.mp3');
+      //document.querySelector("#audio_button_id").src = "static/hello.mp3"
+      second_box_audio.load()
+      second_box_audio.play()
+
+    }
+
+
+    //output language buttons function
+    let radio_button = document.querySelectorAll("input[name='btnradiosecond']");
+    let findselection = () => {
+      let selection = document.querySelector("input[name='btnradiosecond']:checked").value;
+      document.querySelector('#selected_button_value').value = selection;
+      document.querySelector('#selected_button_value_next').value = selection;
+      document.querySelector('#input_field_value').value = document.querySelector(".input_text").value;
+      var input1 = document.querySelector('#input_field_value').value
+      if (input1 != "") {
+        document.forms.output_language_form.submit()
+      }
+      else {
+        document.forms.output_language_form_next.submit()
+      }
+    }
+    radio_button.forEach(radiobtn => {
+      radiobtn.addEventListener("click", findselection);
+    })
+
+    //user input box submit function
+    function keyPressed_function(e) {
+      if ((e && e.keyCode == 13) || e == 0) {
+        document.forms.input_form_id.submit()
+      }
+    }
+
+    //word counting function 
+    setInterval(() => {
+      var user_input_count = document.querySelector(".input_text").value.length;
+      word_count.innerHTML = user_input_count;
+      if (user_input_count == 0) {
+        document.querySelector("#translate_text_h1").innerHTML = "Translate";
+        document.querySelector("#first_box_speaker").style.visibility = "hidden";
+        document.querySelector("#output_text_container_speaker_image").style.visibility = "hidden";
+        document.querySelector("#python_speaker_value").value = "";
+      }
+      else {
+        document.querySelector("#python_speaker_value").value = document.querySelector(".input_text").value;
+        document.querySelector("#translate_text_h1").innerHTML = "{% if translatedtext %}{{ translatedtext }}{% else %} Translating {% endif %}";
+        document.querySelector("#first_box_speaker").style.visibility = "visible";
+        document.querySelector("#output_text_container_speaker_image").style.visibility = "visible";
+      }
+      var user_input = document.querySelector(".input_text").value;
+      user_input_data_upon_speaker.innerHTML = user_input
+    }, 100)
+
+
+    //side navbar opening function
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+    }
+    //side navbar closing function
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+    }
+
+
+    //more output languages setting
+    more_output_languages=document.querySelector("#more_output_languages").value;
+    console.log(more_output_languages)
+
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script> -->
+</body>
+
+</html>
